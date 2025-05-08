@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Registration</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 50px; }
+        .container { width: 300px; margin: auto; }
+        input, button { width: 100%; margin: 5px 0; padding: 8px;  }
+        .error { color: red; font-size: 14px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>User Registration</h2>
+    <form id="registrationForm">
+        <input type="text" id="name" placeholder="Full Name" required>
+        <input type="email" id="email" placeholder="Email" required>
+        <input type="password" id="password" placeholder="Password" required>
+        <input type="password" id="confirmPassword" placeholder="Confirm Password" required>
+        <input type="contact" id="contact"placeholder="contact number" required>
+        <button type="submit">Register</button>
+        <p class="error" id="errorMessage"></p>
+    </form>
+</div>
+
+<script>
+    document.getElementById("registrationForm").addEventListener("submit", function(event) {
+        event.preventDefault();
+
+        // Get input values
+        const name = document.getElementById("name").value.trim();
+        const email = document.getElementById("email").value.trim();
+        const password = document.getElementById("password").value.trim();
+        const confirmPassword = document.getElementById("confirmPassword").value.trim();
+        const errorMessage = document.getElementById("errorMessage");
+
+        // Validation
+        if (!name || !email || !password || !confirmPassword) {
+            errorMessage.textContent = "All fields are required!";
+            return;
+        }
+
+        if (!/^\S+@\S+\.\S+$/.test(email)) {
+            errorMessage.textContent = "Invalid email format!";
+            return;
+        }
+
+        if (password.length < 6) {
+            errorMessage.textContent = "Password must be at least 6 characters long!";
+            return;
+        }
+
+        if (password !== confirmPassword) {
+            errorMessage.textContent = "Passwords do not match!";
+            return;
+        }
+
+        errorMessage.textContent = "";
+
+        // Create user object
+        const userData = { name, email, password };
+
+        // Save to localStorage
+        let users = JSON.parse(localStorage.getItem("users")) || [];
+        users.push(userData);
+        localStorage.setItem("users", JSON.stringify(users));
+
+        // Simulate AJAX POST request (Mock API endpoint)
+        fetch("https://jsonplaceholder.typicode.com/posts", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(userData)
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log("User Registered via AJAX:", data);
+            alert("Registration Successful!");
+            window.location.href = "users.html"; // Redirect to user list page
+        })
+        .catch(error => console.error("Error:", error));
+    });
+</script>
+
+</body>
+</html>
+

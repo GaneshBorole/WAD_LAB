@@ -1,0 +1,10 @@
+
+1.Extract the file (if already then dont)
+2.open folder in vs code
+3.look if in correct folder 
+4. run these command:
+ npm install -g @angular/cli
+ npm install
+ ng serve 
+
+( if ng serve not running use these npm start)
